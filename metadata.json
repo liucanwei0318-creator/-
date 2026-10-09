@@ -1,0 +1,8 @@
+{
+  "name": "MVP - Agent技能索引与人机治理工作台",
+  "description": "AI-assisted Skill Indexing + Human-in-the-loop Governance",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
