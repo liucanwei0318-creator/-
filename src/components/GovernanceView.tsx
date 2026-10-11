@@ -1,6 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Skill, GovernanceAlert, SkillDuplicatePair } from '../types/agent';
+import { Skill, GovernanceAlert, SkillDuplicatePair, SkillInteractionLog } from '../types/agent';
 import { GovernanceEngine, KeywordAssociationResult } from '../services/governance';
+import { SkillPerformanceCharts } from './SkillPerformanceCharts';
+import { MetaSkillStudio } from './MetaSkillStudio';
+import { AutoRepairModal } from './AutoRepairModal';
+import { INITIAL_INTERACTION_LOGS } from '../data/defaultInteractionLogs';
 import {
   AlertTriangle,
   ShieldAlert,
@@ -24,28 +28,41 @@ import {
   FileSpreadsheet,
   GitMerge,
   Info,
+  Flame,
+  BarChart3,
+  Bot,
+  History,
 } from 'lucide-react';
 
 interface GovernanceViewProps {
   skills: Skill[];
+  interactionLogs?: SkillInteractionLog[];
   onUpdateSkill: (updatedSkill: Skill) => void;
   onAddSkills: (newSkills: Skill[]) => void;
   onDeleteSkill?: (skillId: string) => void;
+  onAddInteractionLog?: (log: SkillInteractionLog) => void;
 }
 
 export const GovernanceView: React.FC<GovernanceViewProps> = ({
   skills,
+  interactionLogs,
   onUpdateSkill,
   onAddSkills,
   onDeleteSkill,
+  onAddInteractionLog,
 }) => {
   const [governanceTab, setGovernanceTab] = useState<
-    'audit' | 'duplicates' | 'association' | 'sandbox'
-  >('duplicates'); // 默认展示用户重点关注的重复度审查
+    'charts' | 'meta_studio' | 'duplicates' | 'audit' | 'association' | 'sandbox'
+  >('charts'); // 默认展示用户新增的 Recharts 数据可视化趋势分析模块
   const [sandboxLog, setSandboxLog] = useState<string[]>([]);
   const [isProbing, setIsProbing] = useState<boolean>(false);
   const [vaguePrompt, setVaguePrompt] = useState<string>('报表核算');
   const [refineSuccessMsg, setRefineSuccessMsg] = useState<string | null>(null);
+  const [repairTargetSkill, setRepairTargetSkill] = useState<Skill | null>(null);
+
+  const effectiveLogs = useMemo(() => {
+    return interactionLogs && interactionLogs.length > 0 ? interactionLogs : INITIAL_INTERACTION_LOGS;
+  }, [interactionLogs]);
 
   // 定期重复性审查配置状态
   const [duplicateThreshold, setDuplicateThreshold] = useState<number>(0.75);
@@ -200,15 +217,19 @@ export const GovernanceView: React.FC<GovernanceViewProps> = ({
   const handleRefineSkill = (skill: Skill) => {
     const refined: Skill = {
       ...skill,
-      error_count: Math.max(0, Math.floor(skill.error_count / 2)),
+      error_count: 0, // 彻底清零报错计数
+      error_rate: 0,
+      domains_invoked: [skill.content_domain || skill.clusters[0] || '核心专精领域'], // 治理收敛跨界调用领域，消除语义贪婪
       disambiguation_features:
-        skill.disambiguation_features + ' [经人机治理引擎优化精炼：强化入参模式匹配]',
+        (skill.disambiguation_features || '') + ' [经人机治理引擎优化精炼：入参Schema模式强化校验 & 跨界收敛]',
       negative_triggers: Array.from(
-        new Set([...skill.negative_triggers, '请勿传递不合规未校验槽位'])
+        new Set([...skill.negative_triggers, '请勿传递不合规未校验槽位', '禁止非专精领域的跨领域调用'])
       ),
+      governance_status: 'healed',
+      healed_at: new Date().toLocaleTimeString(),
     };
     onUpdateSkill(refined);
-    setRefineSuccessMsg(`技能 [${skill.name}] 已完成精炼：重置报错率并写入强化约束！`);
+    setRefineSuccessMsg(`技能 [${skill.name}] 已完成精炼：成功重置报错率、收敛跨界领域并写入强化约束！`);
     setTimeout(() => setRefineSuccessMsg(null), 3500);
   };
 
@@ -222,9 +243,12 @@ export const GovernanceView: React.FC<GovernanceViewProps> = ({
       description: `专注于金融风控与合规报表场景的专用型 ${skill.name}`,
       clusters: ['商业金融', '文档处理'],
       domains_invoked: ['金融风控'],
-      call_count: Math.floor(skill.call_count / 2),
+      call_count: Math.max(1, Math.floor(skill.call_count / 2)),
       error_count: 0,
+      error_rate: 0,
       disambiguation_features: '专为金融领域研报与资产负债表生成设计',
+      governance_status: 'healed',
+      healed_at: new Date().toLocaleTimeString(),
     };
     const splitB: Skill = {
       ...skill,
@@ -234,16 +258,70 @@ export const GovernanceView: React.FC<GovernanceViewProps> = ({
       description: `专注于法务合同与诉讼文档场景的专用型 ${skill.name}`,
       clusters: ['法务合规', '文档处理'],
       domains_invoked: ['法务审核'],
-      call_count: Math.floor(skill.call_count / 2),
+      call_count: Math.max(1, Math.floor(skill.call_count / 2)),
       error_count: 0,
+      error_rate: 0,
       disambiguation_features: '专为法律合同与条款排版生成设计',
+      governance_status: 'healed',
+      healed_at: new Date().toLocaleTimeString(),
     };
 
     onAddSkills([splitA, splitB]);
+    // 关键修复：拆解后同步删除原跨界贪婪技能，避免原技能及其告警永久残留
+    if (onDeleteSkill) {
+      onDeleteSkill(skill.skill_id);
+    }
     setRefineSuccessMsg(
-      `已成功将跨界万金油技能 [${skill.name}] 拆解为 2 个垂直领域专家技能：[${splitA.name}] 与 [${splitB.name}]！`
+      `已成功将跨界万金油技能 [${skill.name}] 拆解为 2 个垂直领域专家技能：[${splitA.name}] 与 [${splitB.name}]，并下线原贪婪技能！`
     );
     setTimeout(() => setRefineSuccessMsg(null), 4000);
+  };
+
+  // 模拟注入测试告警 (用于演示或验证治理告警机制)
+  const handleSimulateInjectAnomalies = () => {
+    const target = skills.find((s) => s.skill_id === 's1') || skills[0];
+    if (!target) return;
+    const abnormal: Skill = {
+      ...target,
+      call_count: 14,
+      error_count: 4,
+      error_rate: 4 / 14,
+      domains_invoked: ['办公自动化', '金融风控', '法务审核'],
+      governance_status: 'quarantined',
+    };
+    onUpdateSkill(abnormal);
+    setRefineSuccessMsg(`已成功向 [${target.name}] 注入模拟三级告警 (高报错率 28.6% & 语义贪婪 3个领域)！`);
+    setTimeout(() => setRefineSuccessMsg(null), 4000);
+  };
+
+  // 一键清零修复全库所有报错与异常
+  const handleClearAllAnomalies = () => {
+    skills.forEach((s) => {
+      if (s.error_count > 0 || s.domains_invoked.length >= 3) {
+        onUpdateSkill({
+          ...s,
+          error_count: 0,
+          error_rate: 0,
+          governance_status: 'healed',
+          healed_at: new Date().toLocaleTimeString(),
+          domains_invoked: [s.content_domain || s.clusters[0] || '核心专精领域'],
+        });
+      }
+    });
+    setRefineSuccessMsg('已成功一键重置全库所有技能的报错率与跨界调用领域，全库已恢复极致健康！');
+    setTimeout(() => setRefineSuccessMsg(null), 4000);
+  };
+
+  // 自动修复回调：应用自愈后的技能
+  const handleApplyRepair = (healedSkill: Skill, repairLog: SkillInteractionLog) => {
+    onUpdateSkill(healedSkill);
+    if (onAddInteractionLog) {
+      onAddInteractionLog(repairLog);
+    }
+    setRefineSuccessMsg(
+      `技能 [${healedSkill.name}] 已通过元技能成功自愈！根据历史交互日志自动调整了能力描述与执行参数，报错率已重置归零。`
+    );
+    setTimeout(() => setRefineSuccessMsg(null), 4500);
   };
 
   // 统计指标
@@ -322,6 +400,30 @@ export const GovernanceView: React.FC<GovernanceViewProps> = ({
       {/* 治理二级标签栏 */}
       <div className="flex items-center gap-2 border-b border-slate-800 pb-2 flex-wrap">
         <button
+          onClick={() => setGovernanceTab('charts')}
+          className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm ${
+            governanceTab === 'charts'
+              ? 'bg-sky-600 text-white font-bold'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+          }`}
+        >
+          <BarChart3 className="w-3.5 h-3.5 text-sky-200" />
+          数据可视化分析 (Recharts)
+        </button>
+
+        <button
+          onClick={() => setGovernanceTab('meta_studio')}
+          className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm ${
+            governanceTab === 'meta_studio'
+              ? 'bg-indigo-600 text-white font-bold'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+          }`}
+        >
+          <Bot className="w-3.5 h-3.5 text-indigo-200" />
+          元技能中心与自愈工作台
+        </button>
+
+        <button
           onClick={() => setGovernanceTab('duplicates')}
           className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm ${
             governanceTab === 'duplicates'
@@ -330,14 +432,14 @@ export const GovernanceView: React.FC<GovernanceViewProps> = ({
           }`}
         >
           <CopyCheck className="w-3.5 h-3.5 text-rose-300" />
-          定期审查现有技能重复机制 ({duplicatePairs.length})
+          定期审查重复机制 ({duplicatePairs.length})
         </button>
 
         <button
           onClick={() => setGovernanceTab('audit')}
           className={`px-3.5 py-1.5 text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer ${
             governanceTab === 'audit'
-              ? 'bg-indigo-600 text-white font-semibold'
+              ? 'bg-amber-600 text-white font-semibold'
               : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
           }`}
         >
@@ -354,7 +456,7 @@ export const GovernanceView: React.FC<GovernanceViewProps> = ({
           }`}
         >
           <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-          无关键词联想推荐引擎
+          无关键词联想推荐
         </button>
 
         <button
@@ -369,6 +471,28 @@ export const GovernanceView: React.FC<GovernanceViewProps> = ({
           Docker 沙箱接口探测台
         </button>
       </div>
+
+      {/* 选项卡 0: 数据可视化趋势分析 (Recharts) */}
+      {governanceTab === 'charts' && (
+        <SkillPerformanceCharts
+          skills={skills}
+          onSelectSkillForProbe={(target) => {
+            setGovernanceTab('sandbox');
+            handleRunSandboxProbe(target);
+          }}
+          onRefineSkill={handleRefineSkill}
+        />
+      )}
+
+      {/* 选项卡 0.5: 元技能中心与自愈工作台 (Claude Record / OpenAI Creator / Negative Matrix / UCSB Refine) */}
+      {governanceTab === 'meta_studio' && (
+        <MetaSkillStudio
+          skills={skills}
+          onUpdateSkill={onUpdateSkill}
+          onAddSkills={onAddSkills}
+          duplicatePairs={duplicatePairs}
+        />
+      )}
 
       {/* 选项卡 1: 定期审查现有技能是否重复的机制 (用户重点需求) */}
       {governanceTab === 'duplicates' && (
@@ -621,10 +745,106 @@ export const GovernanceView: React.FC<GovernanceViewProps> = ({
       {/* 选项卡 2: 三级告警列表 */}
       {governanceTab === 'audit' && (
         <div className="space-y-4">
+          {/* 告警操作控制栏 */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-3.5 rounded-xl">
+            <div className="text-xs text-slate-300 flex items-center gap-2">
+              <Activity className="w-4 h-4 text-sky-400" />
+              <span>当前实时待处理治理告警: <strong className="text-white font-mono">{alerts.length}</strong> 项</span>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={handleSimulateInjectAnomalies}
+                className="px-3 py-1.5 bg-amber-950/60 hover:bg-amber-900/60 border border-amber-800 text-amber-300 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <Flame className="w-3.5 h-3.5 text-amber-400" />
+                模拟注入异常告警 (用于测试自愈)
+              </button>
+              {alerts.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleClearAllAnomalies}
+                  className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  一键清零修复所有告警
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* 高报错率待自愈技能监控表 (若有报错技能，展示专用自愈控制卡片) */}
+          {highErrorSkills.length > 0 && (
+            <div className="p-4 bg-gradient-to-r from-rose-950/50 via-slate-900 to-indigo-950/50 border border-rose-800/80 rounded-xl space-y-3 shadow-lg shadow-rose-950/20">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <Flame className="w-4 h-4 text-rose-400 animate-pulse" />
+                  <span className="text-xs font-bold text-white">
+                    高报错率待自愈技能监控表 ({highErrorSkills.length} 项超标)
+                  </span>
+                  <span className="text-[10px] bg-rose-950 text-rose-300 px-2 py-0.5 rounded border border-rose-800 font-mono">
+                    报错阈值 ≥ 20%
+                  </span>
+                </div>
+                <span className="text-[11px] text-slate-400">
+                  支持基于历史操作记录一键激活 Meta-skill 自动调整描述与执行参数
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {highErrorSkills.map((s) => {
+                  const errorPct = ((s.error_count / s.call_count) * 100).toFixed(1);
+                  const skillLogs = effectiveLogs.filter((l) => l.skill_id === s.skill_id);
+                  return (
+                    <div
+                      key={s.skill_id}
+                      className="p-3 bg-slate-950 border border-slate-800 hover:border-slate-700 rounded-lg flex items-center justify-between gap-3 transition-colors"
+                    >
+                      <div className="space-y-1 min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-bold text-white text-xs truncate">
+                            {s.display_name || s.name}
+                          </span>
+                          <span className="px-1.5 py-0.2 text-[9px] bg-rose-950 text-rose-300 rounded border border-rose-800 font-mono shrink-0">
+                            {errorPct}% 报错
+                          </span>
+                        </div>
+                        <div className="text-[11px] text-slate-400">
+                          调用 {s.call_count} 次，报错 {s.error_count} 次 · 关联 {skillLogs.length} 条历史操作日志
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => setRepairTargetSkill(s)}
+                        className="px-3 py-1.5 bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all shadow-md shadow-indigo-950/40 shrink-0 cursor-pointer"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+                        尝试自动修复
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {alerts.length === 0 ? (
-            <div className="p-8 bg-slate-900 border border-slate-800 rounded-xl text-center text-xs text-slate-400">
-              <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
-              当前所有已注册技能健康度极高，未触发高报错率或语义贪婪风险！
+            <div className="p-10 bg-slate-900 border border-slate-800 rounded-xl text-center text-xs text-slate-400 space-y-3">
+              <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
+              <div className="text-sm font-bold text-slate-200">当前所有已装载技能健康度极高！</div>
+              <p className="text-slate-400 max-w-lg mx-auto leading-relaxed">
+                未检测到任何高报错率、语义贪婪或负向规则缺失风险。若之前存在异常技能，已被成功精炼恢复或通过元技能自愈修复，并通过持久化存储保持最新健康状态。
+              </p>
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={handleSimulateInjectAnomalies}
+                  className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-medium inline-flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Flame className="w-3.5 h-3.5 text-amber-400" />
+                  再次模拟注入异常进行测试
+                </button>
+              </div>
             </div>
           ) : (
             <div className="space-y-3">
@@ -664,6 +884,13 @@ export const GovernanceView: React.FC<GovernanceViewProps> = ({
                         {alert.type === 'high_error_rate' && (
                           <>
                             <button
+                              onClick={() => setRepairTargetSkill(targetSkill)}
+                              className="px-3 py-1.5 bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all shadow-md shadow-indigo-950/40 whitespace-nowrap cursor-pointer"
+                            >
+                              <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+                              尝试自动修复
+                            </button>
+                            <button
                               onClick={() => {
                                 setGovernanceTab('sandbox');
                                 handleRunSandboxProbe(targetSkill);
@@ -675,7 +902,7 @@ export const GovernanceView: React.FC<GovernanceViewProps> = ({
                             </button>
                             <button
                               onClick={() => handleRefineSkill(targetSkill)}
-                              className="px-2.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs flex items-center gap-1 transition-colors whitespace-nowrap cursor-pointer"
+                              className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs flex items-center gap-1 transition-colors whitespace-nowrap cursor-pointer"
                             >
                               <Sparkles className="w-3.5 h-3.5" />
                               一键精炼
@@ -844,6 +1071,17 @@ export const GovernanceView: React.FC<GovernanceViewProps> = ({
             )}
           </div>
         </div>
+      )}
+
+      {/* 自动自愈弹窗：基于历史交互日志由 Meta-skill 自动调整描述与执行参数 */}
+      {repairTargetSkill && (
+        <AutoRepairModal
+          skill={repairTargetSkill}
+          skills={skills}
+          interactionLogs={effectiveLogs}
+          onClose={() => setRepairTargetSkill(null)}
+          onApplyRepair={handleApplyRepair}
+        />
       )}
     </div>
   );

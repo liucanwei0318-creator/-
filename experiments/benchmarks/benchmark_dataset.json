@@ -1,0 +1,362 @@
+[
+  {
+    "id": "gaia_turn_1_excel",
+    "turn_depth": 1,
+    "user_instruction": "请分析这份各季度市场销售业绩数据，执行 Excel 表格透视分析并核算销售转化指标。",
+    "target_skill_id": "s_excel_01",
+    "target_skill_name": "Excel 数据透视与报表计算",
+    "domain": "财务数据与表格核算",
+    "context_history": [
+      { "role": "user", "content": "请分析这份各季度市场销售业绩数据，执行 Excel 表格透视分析并核算销售转化指标。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_1_formula",
+    "turn_depth": 1,
+    "user_instruction": "请针对这份跨大区销售利润表，使用电子表格高级函数自动化生成加权毛利率与动态提成模型。",
+    "target_skill_id": "qwen_tabular_insight",
+    "target_skill_name": "表格公式与数据洞察分析器",
+    "domain": "财务数据与表格核算",
+    "context_history": [
+      { "role": "user", "content": "请针对这份跨大区销售利润表，使用电子表格高级函数自动化生成加权毛利率与动态提成模型。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_2_doc",
+    "turn_depth": 2,
+    "user_instruction": "把整理后的技术评审规范文档与发布说明，使用 Markdown 编译器进行结构化排版和预览渲染。",
+    "target_skill_id": "claude_markdown_compiler",
+    "target_skill_name": "Claude 结构化 Markdown 预览与排版渲染器",
+    "domain": "文档排版与多模态解析",
+    "context_history": [
+      { "role": "user", "content": "我们正在复盘 Q3 季度营收与跨部门营销预算，需要深入挖掘多维度财务指标。" },
+      { "role": "model", "content": "已为您梳理 Q3 营收及预算明细，包含北方大区与华南大区对比。" },
+      { "role": "user", "content": "把整理后的技术评审规范文档与发布说明，使用 Markdown 编译器进行结构化排版和预览渲染。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_2_contract",
+    "turn_depth": 2,
+    "user_instruction": "审计这份涉外 SaaS 采购框架合同中的违约免责条款及知识产权归属争议点，出具多法域法律合规意见书。",
+    "target_skill_id": "claude_contract_auditor",
+    "target_skill_name": "涉外合同合规多法域审计器",
+    "domain": "法律合规与合同审计",
+    "context_history": [
+      { "role": "user", "content": "法务部正在与海外软件供应商核对最终合同草案，请协助排查法律风险。" },
+      { "role": "model", "content": "收到采购合同草案，随时准备逐条款进行法律审查。" },
+      { "role": "user", "content": "审计这份涉外 SaaS 采购框架合同中的违约免责条款及知识产权归属争议点，出具多法域法律合规意见书。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_3_watermark",
+    "turn_depth": 3,
+    "user_instruction": "为了防止该文档在外部合作伙伴审计流转过程中被截屏未授权泄漏，请在文档每页斜向添加'内部绝密_机密审计'半透明防伪安全水印。",
+    "target_skill_id": "my_skill_01",
+    "target_skill_name": "PDF 防伪安全水印注入器",
+    "domain": "安全合规与文档保护",
+    "context_history": [
+      { "role": "user", "content": "公司启动了与境外投资机构的尽调审计，涉及大量敏感财务数据。" },
+      { "role": "model", "content": "已收到尽调项目要求，请随时发送需要处理的文件。" },
+      { "role": "user", "content": "先帮我核对所有附录报表，提取出资产负债表与利润表比率。" },
+      { "role": "model", "content": "资产负债率与现金流比率已核算完毕，现金覆盖倍数为 2.4x。" },
+      { "role": "user", "content": "为了防止该文档在外部合作伙伴审计流转过程中被截屏未授权泄漏，请在文档每页斜向添加'内部绝密_机密审计'半透明防伪安全水印。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_3_ocr",
+    "turn_depth": 3,
+    "user_instruction": "从扫描发票影像及纸质验收单据中，利用多模态视觉识别技术高精度提取表格结构化文字及印章元数据。",
+    "target_skill_id": "openai_vision_ocr",
+    "target_skill_name": "多模态视觉文档与表格 OCR 提取器",
+    "domain": "文档排版与多模态解析",
+    "context_history": [
+      { "role": "user", "content": "财务部收到了数批纸质增值税发票与海关报关验收单影像。" },
+      { "role": "model", "content": "已做好多模态图像处理准备，图像质量检查完毕。" },
+      { "role": "user", "content": "请确认影像中分辨率是否满足工业级 OCR 要求。" },
+      { "role": "model", "content": "经灰度与对比度增强，图像文字边缘清晰，满足识别要求。" },
+      { "role": "user", "content": "从扫描发票影像及纸质验收单据中，利用多模态视觉识别技术高精度提取表格结构化文字及印章元数据。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_4_crm",
+    "turn_depth": 4,
+    "user_instruction": "针对 Q4 季度入库的 3,000 位高净值潜客名单，基于客户交互旅程与信用记录开展意向评分与优先级分层。",
+    "target_skill_id": "crm_lead_scorer",
+    "target_skill_name": "CRM 潜客线索多维价值评分器",
+    "domain": "营销增长与客户关系",
+    "context_history": [
+      { "role": "user", "content": "市场部 Q4 获得了大量营销引流潜客线索，需要销售团队快速承接。" },
+      { "role": "model", "content": "了解，需对潜客数据进行去重与画像标准化整合。" },
+      { "role": "user", "content": "清洗后剔除了 420 个无效手机号与重复登记。" },
+      { "role": "model", "content": "已完成数据校验，剩余有效线索总计 3,000 条。" },
+      { "role": "user", "content": "我们需要根据企业规模与活跃度进行梯队划分。" },
+      { "role": "model", "content": "已预加载行业特征标签与历次商机拜访记录。" },
+      { "role": "user", "content": "针对 Q4 季度入库的 3,000 位高净值潜客名单，基于客户交互旅程与信用记录开展意向评分与优先级分层。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_4_sql",
+    "turn_depth": 4,
+    "user_instruction": "线上核心交易库最近出现响应陡增，请诊断慢查询 SQL 并重构生成带覆盖索引的高性能多表关联查询脚本。",
+    "target_skill_id": "deepseek_sql_querier",
+    "target_skill_name": "数据库 SQL 慢查询调优与智能生成器",
+    "domain": "代码工程与系统架构",
+    "context_history": [
+      { "role": "user", "content": "DBA 报告核心订单集群在高峰期 CPU 占用率超过 85%。" },
+      { "role": "model", "content": "已开启慢查询日志采集，正在监听慢事务执行计划。" },
+      { "role": "user", "content": "抓取到了几条执行耗时超过 3.5 秒的跨库多表关联查询。" },
+      { "role": "model", "content": "涉及订单表、支付记录表与优惠券流水表的嵌套全表扫描。" },
+      { "role": "user", "content": "线上核心交易库最近出现响应陡增，请诊断慢查询 SQL 并重构生成带覆盖索引的高性能多表关联查询脚本。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_5_weather",
+    "turn_depth": 5,
+    "user_instruction": "查询西雅图、纽约及东京未来 7 天的天气预报、降雨概率与温差走势，指导代表团差旅着装与航线安排。",
+    "target_skill_id": "s3",
+    "target_skill_name": "全球城市多日天气与气象研判",
+    "domain": "差旅会务与出行保障",
+    "context_history": [
+      { "role": "user", "content": "公司高管团队下周需要前往西雅图和日本进行技术商务考察。" },
+      { "role": "model", "content": "已收到差旅规划诉求，将协助统筹行程安排与会议日程。" },
+      { "role": "user", "content": "先统计代表团出行人员名单和签证有效期情况。" },
+      { "role": "model", "content": "代表团共 6 人，所有人员签证均在有效期内且满足入境政策。" },
+      { "role": "user", "content": "需要考虑北美暴风雪以及东亚台风季节对航班延误的潜在影响。" },
+      { "role": "model", "content": "确实，冬季和跨国季风可能导致中转枢纽航班大面积调整。" },
+      { "role": "user", "content": "查询西雅图、纽约及东京未来 7 天的天气预报、降雨概率与温差走势，指导代表团差旅着装与航线安排。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_5_inventory",
+    "turn_depth": 5,
+    "user_instruction": "根据各区域中心仓库的日均出库周转率与在途物流周期，执行多级库存安全水位优化测算。",
+    "target_skill_id": "supply_chain_inventory_opt",
+    "target_skill_name": "供应链多级库存安全水位动态优化器",
+    "domain": "供应链协同与物流管控",
+    "context_history": [
+      { "role": "user", "content": "华东与华南保税仓近期出现部分紧俏物料断货预警。" },
+      { "role": "model", "content": "正在拉取 ERP 各仓库近 90 天出库流水与交货周期数据。" },
+      { "role": "user", "content": "上游晶圆供应商交期延长了 2 周，导致在途备件波动加剧。" },
+      { "role": "model", "content": "已更新供应商交期方差参数，需重新核算安全备货阈值。" },
+      { "role": "user", "content": "根据各区域中心仓库的日均出库周转率与在途物流周期，执行多级库存安全水位优化测算。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_6_invoice",
+    "turn_depth": 6,
+    "user_instruction": "批量核验本月 120 张差旅和采购增值税发票的真伪、税率核定及防重复报销合规校验。",
+    "target_skill_id": "finance_invoice_auditor",
+    "target_skill_name": "财务增值税发票智能真伪防重核销器",
+    "domain": "财务数据与表格核算",
+    "context_history": [
+      { "role": "user", "content": "财务月结即将截止，员工集中提交了大量跨部门报销单据。" },
+      { "role": "model", "content": "已开启发票归集通道，准备核验票面信息与税务签章。" },
+      { "role": "user", "content": "需要剔除抬头不符或纳税人识别号填错的废票。" },
+      { "role": "model", "content": "已完成发票抬头预审，发现 3 张子公司开票抬头混淆。" },
+      { "role": "user", "content": "请确保严防连号发票与重复报销套现违规行为。" },
+      { "role": "model", "content": "历史发票底账库已建立索引比对，支持毫秒级查重。" },
+      { "role": "user", "content": "批量核验本月 120 张差旅和采购增值税发票的真伪、税率核定及防重复报销合规校验。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_6_meeting",
+    "turn_depth": 6,
+    "user_instruction": "从本次长达 2 小时的战略闭门研讨会录音纪要中，精准抽取核心决策事项、分工责任人与完成截止期限。",
+    "target_skill_id": "meeting_action_extractor",
+    "target_skill_name": "全员会议纪要决策与行动项抽取器",
+    "domain": "协同办公与行政管理",
+    "context_history": [
+      { "role": "user", "content": "管理层刚结束 2027 年度战略产品线闭门研讨会。" },
+      { "role": "model", "content": "已获取闭门会议初版速记文本，正在消除口语化语气词。" },
+      { "role": "user", "content": "会议讨论了关于自研架构重构、出海预算与裁撤边缘业务的争论。" },
+      { "role": "model", "content": "已识别出多个跨部门争议点与最终 CEO 拍板共识。" },
+      { "role": "user", "content": "从本次长达 2 小时的战略闭门研讨会录音纪要中，精准抽取核心决策事项、分工责任人与完成截止期限。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_8_log",
+    "turn_depth": 8,
+    "user_instruction": "分析线上分布式集群过去 24 小时的数百万条错误调用链日志，执行异常根因定位与聚类诊断。",
+    "target_skill_id": "deepseek_log_anomaly_detector",
+    "target_skill_name": "分布式集群链路日志异常聚类检测器",
+    "domain": "代码工程与系统架构",
+    "context_history": [
+      { "role": "user", "content": "监控大屏告警：海外服务网关出现间歇性 504 错误。" },
+      { "role": "model", "content": "正在追踪微服务分布式链路 TraceID 拓扑流向。" },
+      { "role": "user", "content": "排查发现并非网络抖动，而是某个后端 RPC 线程池耗尽挂起。" },
+      { "role": "model", "content": "已定位到支付下游服务未设置熔断降级超时配置。" },
+      { "role": "user", "content": "上游大量重试请求进一步加剧了数据库连接池雪崩。" },
+      { "role": "model", "content": "建议对异常请求特征码进行特征工程提取与时间序列聚类。" },
+      { "role": "user", "content": "分析线上分布式集群过去 24 小时的数百万条错误调用链日志，执行异常根因定位与聚类诊断。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_8_search",
+    "turn_depth": 8,
+    "user_instruction": "全网联网检索全球头部开源大模型生态在端侧推理量化领域的最新突破、论文成果与基准跑分。",
+    "target_skill_id": "openai_web_search",
+    "target_skill_name": "实时联网搜索与学术前沿知识检索",
+    "domain": "前沿研究与知识检索",
+    "context_history": [
+      { "role": "user", "content": "技术团队准备在边缘设备上部署千亿级稀疏 MoE 架构模型。" },
+      { "role": "model", "content": "已调出关于端侧算力、NPU 算子支持与内存带宽的评估框架。" },
+      { "role": "user", "content": "目前需要评估 FP8、INT4 与 AWQ 量化方案在真实设备上的精度损失。" },
+      { "role": "model", "content": "近期国际顶会收录了多篇针对推测解码与低比特激活量化的论文。" },
+      { "role": "user", "content": "全网联网检索全球头部开源大模型生态在端侧推理量化领域的最新突破、论文成果与基准跑分。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_10_email",
+    "turn_depth": 10,
+    "user_instruction": "请向团队核心人员发出一封包含西雅图每日议程与天气提醒的企业级单发邮件通知网关，抄送运营团队。",
+    "target_skill_id": "s5",
+    "target_skill_name": "企业级多渠道邮件发送网关",
+    "domain": "办公协同与通知网关",
+    "context_history": [
+      { "role": "user", "content": "讨论西雅图出差议程，第一天拜访微软园区与云计算中心。" },
+      { "role": "model", "content": "已录入西雅图第一天拜访日程与接待联系人。" },
+      { "role": "user", "content": "第二天安排与西雅图当地风险投资机构进行早餐研讨会。" },
+      { "role": "model", "content": "早餐会地点选定在联合湖畔会议中心，预订 8 位席位。" },
+      { "role": "user", "content": "查询西雅图当地近期气温，注意防雨与降温预警。" },
+      { "role": "model", "content": "西雅图近期多阴雨天气，平均气温 7~13 摄氏度，请备好防雨风衣。" },
+      { "role": "user", "content": "第三天准备前往机场回程，核对所有报销票据与会后纪要。" },
+      { "role": "model", "content": "所有行程凭证均已完成电子归档并绑定差旅流水号。" },
+      { "role": "user", "content": "请向团队核心人员发出一封包含西雅图每日议程与天气提醒的企业级单发邮件通知网关，抄送运营团队。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_10_diagram",
+    "turn_depth": 10,
+    "user_instruction": "基于团队梳理的分布式跨云多活架构，使用矢量渲染引擎输出一套规范的架构拓扑 SVG 流程图。",
+    "target_skill_id": "claude_svg_diagram",
+    "target_skill_name": "Claude 矢量 SVG 架构拓扑流程图渲染器",
+    "domain": "文档排版与多模态解析",
+    "context_history": [
+      { "role": "user", "content": "架构委员会正在评估三地五中心跨云双活的高可用容灾方案。" },
+      { "role": "model", "content": "已明确 DNS 智能流量调度层、API 网关鉴权集群与消息总线拓扑。" },
+      { "role": "user", "content": "在数据层采用跨机房分布式 MySQL Raft 同步与 Redis 哨兵集群。" },
+      { "role": "model", "content": "存储层同步延迟要求在 15ms 内，具备单可用区故障 0 秒自动切换。" },
+      { "role": "user", "content": "基于团队梳理的分布式跨云多活架构，使用矢量渲染引擎输出一套规范的架构拓扑 SVG 流程图。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_12_factor",
+    "turn_depth": 12,
+    "user_instruction": "针对高频股票 Level-2 逐笔委托数据，运用遗传规划与符号回归自动构建多维 Alpha 量化衍生因子。",
+    "target_skill_id": "deepseek_quant_factor",
+    "target_skill_name": "高频量化金融 Alpha 衍生因子生成器",
+    "domain": "金融量化与投资研究",
+    "context_history": [
+      { "role": "user", "content": "量化研究组准备开发一套针对股指期货的高频统计套利策略。" },
+      { "role": "model", "content": "已接入行情回放系统，日均 Tick 数据量约 1.2 亿条记录。" },
+      { "role": "user", "content": "需要剔除集合竞价阶段的异常大单挂撤单噪音。" },
+      { "role": "model", "content": "已完成清洗，订单簿深度与买卖盘失衡度 (Order Book Imbalance) 因子构建完成。" },
+      { "role": "user", "content": "针对高频股票 Level-2 逐笔委托数据，运用遗传规划与符号回归自动构建多维 Alpha 量化衍生因子。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_12_git",
+    "turn_depth": 12,
+    "user_instruction": "对核心微服务 Git 代码仓库进行全分支提交历史扫描，审计代码漏洞并排查敏感凭证泄露风险。",
+    "target_skill_id": "git_repo_manager",
+    "target_skill_name": "Git 仓库全分支代码与密钥审计器",
+    "domain": "代码工程与系统架构",
+    "context_history": [
+      { "role": "user", "content": "安全团队要求对生产环境所有开源和自研代码仓库进行合规审计。" },
+      { "role": "model", "content": "正在准备 Git Commit 日志解析器与静态抽象语法树分析流水线。" },
+      { "role": "user", "content": "重点关注历史上开发者是否曾误将 AWS/GCP AccessKey 提交入库。" },
+      { "role": "model", "content": "已配置熵增算法与正则表达式，检测高危密钥特征字符串。" },
+      { "role": "user", "content": "对核心微服务 Git 代码仓库进行全分支提交历史扫描，审计代码漏洞并排查敏感凭证泄露风险。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_15_code_interpreter",
+    "turn_depth": 15,
+    "user_instruction": "在沙箱环境中利用 Python 编写并执行蒙特卡洛仿真程序，验证金融衍生品在极端尾部风险下的压力测试指标。",
+    "target_skill_id": "openai_code_interpreter",
+    "target_skill_name": "云端 Python 沙箱代码执行与数学建模器",
+    "domain": "代码工程与系统架构",
+    "context_history": [
+      { "role": "user", "content": "投资风控部正在测算雪球结构期权在单边暴跌情景下的敲入概率。" },
+      { "role": "model", "content": "已设定布朗运动随机漫步模型与历史波动率曲面矩阵。" },
+      { "role": "user", "content": "需要加入跳跃扩散泊松过程以模拟极端黑天鹅突发事件。" },
+      { "role": "model", "content": "跳跃扩散参数设置完成，跳跃强度 lambda=0.15，平均跳跃幅度 -20%。" },
+      { "role": "user", "content": "在沙箱环境中利用 Python 编写并执行蒙特卡洛仿真程序，验证金融衍生品在极端尾部风险下的压力测试指标。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_15_hr",
+    "turn_depth": 15,
+    "user_instruction": "发起针对首席架构师候选人的高阶薪酬 Offer 发放流程，自动流转至集团 HRD 与财务 VP 执行多级审批。",
+    "target_skill_id": "hr_offer_courier",
+    "target_skill_name": "HR 核心人才 Offer 审批与发放工作流",
+    "domain": "协同办公与行政管理",
+    "context_history": [
+      { "role": "user", "content": "技术合伙人面试评估通过，候选人综合背景评级为 S 级。" },
+      { "role": "model", "content": "已核验背景调查报告，无虚假履历与竞业限制冲突。" },
+      { "role": "user", "content": "薪酬包方案拟定为基本年薪 + 期权股票池授予方案。" },
+      { "role": "model", "content": "期权授予方案需遵循集团 4 年归属成熟期及 1 年锁定限制要求。" },
+      { "role": "user", "content": "发起针对首席架构师候选人的高阶薪酬 Offer 发放流程，自动流转至集团 HRD 与财务 VP 执行多级审批。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_18_knowledge",
+    "turn_depth": 18,
+    "user_instruction": "在百万级企业非结构化知识库中执行跨模态混合检索与重排，精准提取各研发团队专利申报规范。",
+    "target_skill_id": "qwen_enterprise_knowledge",
+    "target_skill_name": "企业级非结构化知识库混合检索与索引器",
+    "domain": "前沿研究与知识检索",
+    "context_history": [
+      { "role": "user", "content": "知识产权委员会正在整理过去五年内部孵化的专利与发明成果。" },
+      { "role": "model", "content": "已挂载向量知识库底座，包含 12,000 份专利申报交底书和软著代码。" },
+      { "role": "user", "content": "需要区分已获得国家发明专利授权与仍处于公开实审阶段的项目。" },
+      { "role": "model", "content": "元数据过滤标签已更新，覆盖算法芯片、通信协议及分布式存储品类。" },
+      { "role": "user", "content": "在百万级企业非结构化知识库中执行跨模态混合检索与重排，精准提取各研发团队专利申报规范。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_18_redteam",
+    "turn_depth": 18,
+    "user_instruction": "对即将上线的内部大模型应用执行自动化对抗性红队攻击评测，排查越狱提示词与敏感数据逃逸隐患。",
+    "target_skill_id": "claude_security_redteam",
+    "target_skill_name": "大模型安全红队越狱与对抗防御评估器",
+    "domain": "安全合规与文档保护",
+    "context_history": [
+      { "role": "user", "content": "安全审计部门正在对自研大模型 Agent 助手进行上线前渗透测试。" },
+      { "role": "model", "content": "已准备 5,000 条包含多语言 Base64 编码、角色扮演与角色假扮的攻击测试集。" },
+      { "role": "user", "content": "需要验证系统提示词注入攻击下，模型是否会吐露底层数据库链接。" },
+      { "role": "model", "content": "已开启双向输入输出护栏 (Guardrails) 阻断拦截审计监测。" },
+      { "role": "user", "content": "对即将上线的内部大模型应用执行自动化对抗性红队攻击评测，排查越狱提示词与敏感数据逃逸隐患。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_20_quant",
+    "turn_depth": 20,
+    "user_instruction": "根据全球大宗商品期货跨品种波动率偏斜曲面，构建基于极值理论的动态期权希腊字母 Delta-Gamma 中性对冲组合。",
+    "target_skill_id": "deepseek_quant_finance",
+    "target_skill_name": "金融衍生品与投资组合量化风险对冲引擎",
+    "domain": "金融量化与投资研究",
+    "context_history": [
+      { "role": "user", "content": "宏观大宗商品市场受地缘冲突影响，原油与贵金属波动率创历史新高。" },
+      { "role": "model", "content": "已拉取芝加哥商品交易所 (CME) 与伦敦金属交易所 (LME) 期权隐含波动率曲面。" },
+      { "role": "user", "content": "需要评估波动率微笑曲线两端的肥尾风险与偏度 (Skewness) 溢价。" },
+      { "role": "model", "content": "传统正态分布假设已失效，需切换为极值理论 (EVT) 与 GARCH-Copula 联合模型。" },
+      { "role": "user", "content": "根据全球大宗商品期货跨品种波动率偏斜曲面，构建基于极值理论的动态期权希腊字母 Delta-Gamma 中性对冲组合。" }
+    ]
+  },
+  {
+    "id": "gaia_turn_20_debugger",
+    "turn_depth": 20,
+    "user_instruction": "深入分析跨系统多线程并发死锁与内存泄漏 Dump 文件，提供大型工程级重构修复补丁与防御性代码改进建议。",
+    "target_skill_id": "qwen_coder_debugger",
+    "target_skill_name": "超大型工程代码多线程并发调试与重构诊断器",
+    "domain": "代码工程与系统架构",
+    "context_history": [
+      { "role": "user", "content": "高并发压测显示底层 C++ / Go 混编网络库在 10 万长连接时偶发崩溃。" },
+      { "role": "model", "content": "已获取 Core Dump 崩溃堆栈信息及 Valgrind 内存检测跟踪报告。" },
+      { "role": "user", "content": "排查显示 epoll 事件循环与无锁环形队列在极端并发竞争下存在 ABA 竞态漏洞。" },
+      { "role": "model", "content": "CAS 操作需补充版本计数戳或切换为带内存屏障的原子指针操作。" },
+      { "role": "user", "content": "深入分析跨系统多线程并发死锁与内存泄漏 Dump 文件，提供大型工程级重构修复补丁与防御性代码改进建议。" }
+    ]
+  }
+]

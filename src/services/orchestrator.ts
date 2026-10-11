@@ -180,6 +180,8 @@ export class TaskOrchestrator {
       let targetSkill: Skill | null = null;
       let routingScore = 0;
 
+      let negativeDivertedFrom: string | undefined;
+
       // 如果第一步判定为 RETAIN，并且与 activeSkill 相关，复用活跃技能
       if (idx === 0 && transitionEval.decision === 'RETAIN' && session.active_skill) {
         targetSkill = session.active_skill;
@@ -191,9 +193,16 @@ export class TaskOrchestrator {
         );
         targetSkill = routeResult.selectedSkill;
         routingScore = routeResult.score;
+        if (routeResult.divertedTargetSkill && routeResult.negativeExcluded.length > 0) {
+          negativeDivertedFrom = `${routeResult.negativeExcluded[0].skill.name} (反面示例分流)`;
+        }
       }
 
-      const extractedSlots = targetSkill ? this.extractSlots(query, targetSkill) : {};
+      // 提取入参槽位并继承上下文记忆
+      const extractedSlots = targetSkill ? {
+        ...(session.active_slots || {}),
+        ...this.extractSlots(query, targetSkill),
+      } : {};
 
       // 两阶段 Token 成本：仅载入所属簇轻量元数据 (~40 token) + 命中的完整 instruction (~150 token)
       const indexedTokenCost = 45 + 160;
@@ -209,6 +218,7 @@ export class TaskOrchestrator {
         status: 'pending',
         input_from_step: rawStep.inputFromStep,
         routing_score: routingScore,
+        negative_diverted_from: negativeDivertedFrom,
         token_budget: {
           traditional: traditionalTokenBase,
           indexed: indexedTokenCost,

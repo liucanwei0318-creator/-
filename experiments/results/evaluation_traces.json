@@ -1,0 +1,579 @@
+[
+  {
+    "case_id": "gaia_turn_1",
+    "turn_depth": 1,
+    "condition": "direct_all_tools",
+    "iteration": 1,
+    "status": "OMISSION",
+    "selected_tool": null,
+    "expected_tool": "s_excel_01",
+    "duration_ms": 1089,
+    "token_usage": {
+      "prompt": 9560,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:14.595Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_1",
+    "turn_depth": 1,
+    "condition": "skill_index_system_curated",
+    "iteration": 1,
+    "status": "OMISSION",
+    "selected_tool": null,
+    "expected_tool": "s_excel_01",
+    "duration_ms": 1023,
+    "token_usage": {
+      "prompt": 560,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:16.618Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_1",
+    "turn_depth": 1,
+    "condition": "direct_all_tools",
+    "iteration": 2,
+    "status": "SUCCESS",
+    "selected_tool": "s_excel_01",
+    "expected_tool": "s_excel_01",
+    "duration_ms": 683,
+    "token_usage": {
+      "prompt": 9560,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:18.302Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_1",
+    "turn_depth": 1,
+    "condition": "skill_index_system_curated",
+    "iteration": 2,
+    "status": "OMISSION",
+    "selected_tool": null,
+    "expected_tool": "s_excel_01",
+    "duration_ms": 908,
+    "token_usage": {
+      "prompt": 560,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:20.211Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_2",
+    "turn_depth": 2,
+    "condition": "direct_all_tools",
+    "iteration": 1,
+    "status": "SUCCESS",
+    "selected_tool": "claude_markdown_compiler",
+    "expected_tool": "claude_markdown_compiler",
+    "duration_ms": 905,
+    "token_usage": {
+      "prompt": 9640,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:22.117Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_2",
+    "turn_depth": 2,
+    "condition": "skill_index_system_curated",
+    "iteration": 1,
+    "status": "SUCCESS",
+    "selected_tool": "claude_markdown_compiler",
+    "expected_tool": "claude_markdown_compiler",
+    "duration_ms": 1192,
+    "token_usage": {
+      "prompt": 640,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:24.310Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_2",
+    "turn_depth": 2,
+    "condition": "direct_all_tools",
+    "iteration": 2,
+    "status": "SUCCESS",
+    "selected_tool": "claude_markdown_compiler",
+    "expected_tool": "claude_markdown_compiler",
+    "duration_ms": 1434,
+    "token_usage": {
+      "prompt": 9640,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:26.744Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_2",
+    "turn_depth": 2,
+    "condition": "skill_index_system_curated",
+    "iteration": 2,
+    "status": "SUCCESS",
+    "selected_tool": "claude_markdown_compiler",
+    "expected_tool": "claude_markdown_compiler",
+    "duration_ms": 1578,
+    "token_usage": {
+      "prompt": 640,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:29.323Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_3",
+    "turn_depth": 3,
+    "condition": "direct_all_tools",
+    "iteration": 1,
+    "status": "SUCCESS",
+    "selected_tool": "my_skill_01",
+    "expected_tool": "my_skill_01",
+    "duration_ms": 590,
+    "token_usage": {
+      "prompt": 9720,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:30.915Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_3",
+    "turn_depth": 3,
+    "condition": "skill_index_system_curated",
+    "iteration": 1,
+    "status": "SUCCESS",
+    "selected_tool": "my_skill_01",
+    "expected_tool": "my_skill_01",
+    "duration_ms": 705,
+    "token_usage": {
+      "prompt": 720,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:32.621Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_3",
+    "turn_depth": 3,
+    "condition": "direct_all_tools",
+    "iteration": 2,
+    "status": "SUCCESS",
+    "selected_tool": "my_skill_01",
+    "expected_tool": "my_skill_01",
+    "duration_ms": 640,
+    "token_usage": {
+      "prompt": 9720,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:34.261Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_3",
+    "turn_depth": 3,
+    "condition": "skill_index_system_curated",
+    "iteration": 2,
+    "status": "SUCCESS",
+    "selected_tool": "my_skill_01",
+    "expected_tool": "my_skill_01",
+    "duration_ms": 622,
+    "token_usage": {
+      "prompt": 720,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:35.889Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_5",
+    "turn_depth": 5,
+    "condition": "direct_all_tools",
+    "iteration": 1,
+    "status": "SUCCESS",
+    "selected_tool": "s3",
+    "expected_tool": "s3",
+    "duration_ms": 587,
+    "token_usage": {
+      "prompt": 9880,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:37.477Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_5",
+    "turn_depth": 5,
+    "condition": "skill_index_system_curated",
+    "iteration": 1,
+    "status": "SUCCESS",
+    "selected_tool": "s3",
+    "expected_tool": "s3",
+    "duration_ms": 807,
+    "token_usage": {
+      "prompt": 880,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:39.285Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_5",
+    "turn_depth": 5,
+    "condition": "direct_all_tools",
+    "iteration": 2,
+    "status": "SUCCESS",
+    "selected_tool": "s3",
+    "expected_tool": "s3",
+    "duration_ms": 607,
+    "token_usage": {
+      "prompt": 9880,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:40.894Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_5",
+    "turn_depth": 5,
+    "condition": "skill_index_system_curated",
+    "iteration": 2,
+    "status": "SUCCESS",
+    "selected_tool": "s3",
+    "expected_tool": "s3",
+    "duration_ms": 806,
+    "token_usage": {
+      "prompt": 880,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:42.701Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_8",
+    "turn_depth": 8,
+    "condition": "direct_all_tools",
+    "iteration": 1,
+    "status": "SUCCESS",
+    "selected_tool": "openai_web_search",
+    "expected_tool": "openai_web_search",
+    "duration_ms": 638,
+    "token_usage": {
+      "prompt": 10120,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:44.340Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_8",
+    "turn_depth": 8,
+    "condition": "skill_index_system_curated",
+    "iteration": 1,
+    "status": "SUCCESS",
+    "selected_tool": "openai_web_search",
+    "expected_tool": "openai_web_search",
+    "duration_ms": 739,
+    "token_usage": {
+      "prompt": 1120,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:46.079Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_8",
+    "turn_depth": 8,
+    "condition": "direct_all_tools",
+    "iteration": 2,
+    "status": "SUCCESS",
+    "selected_tool": "openai_web_search",
+    "expected_tool": "openai_web_search",
+    "duration_ms": 651,
+    "token_usage": {
+      "prompt": 10120,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:47.730Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_8",
+    "turn_depth": 8,
+    "condition": "skill_index_system_curated",
+    "iteration": 2,
+    "status": "SUCCESS",
+    "selected_tool": "openai_web_search",
+    "expected_tool": "openai_web_search",
+    "duration_ms": 1238,
+    "token_usage": {
+      "prompt": 1120,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:49.969Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_10",
+    "turn_depth": 10,
+    "condition": "direct_all_tools",
+    "iteration": 1,
+    "status": "MISMATCH",
+    "selected_tool": "s3",
+    "expected_tool": "s5",
+    "duration_ms": 590,
+    "token_usage": {
+      "prompt": 10280,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:51.559Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_10",
+    "turn_depth": 10,
+    "condition": "skill_index_system_curated",
+    "iteration": 1,
+    "status": "SUCCESS",
+    "selected_tool": "s5",
+    "expected_tool": "s5",
+    "duration_ms": 1598,
+    "token_usage": {
+      "prompt": 1280,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:54.158Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_10",
+    "turn_depth": 10,
+    "condition": "direct_all_tools",
+    "iteration": 2,
+    "status": "MISMATCH",
+    "selected_tool": "s3",
+    "expected_tool": "s5",
+    "duration_ms": 563,
+    "token_usage": {
+      "prompt": 10280,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:55.723Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_10",
+    "turn_depth": 10,
+    "condition": "skill_index_system_curated",
+    "iteration": 2,
+    "status": "SUCCESS",
+    "selected_tool": "s5",
+    "expected_tool": "s5",
+    "duration_ms": 819,
+    "token_usage": {
+      "prompt": 1280,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:57.542Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_15",
+    "turn_depth": 15,
+    "condition": "direct_all_tools",
+    "iteration": 1,
+    "status": "SUCCESS",
+    "selected_tool": "openai_code_interpreter",
+    "expected_tool": "openai_code_interpreter",
+    "duration_ms": 1180,
+    "token_usage": {
+      "prompt": 10680,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:49:59.723Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_15",
+    "turn_depth": 15,
+    "condition": "skill_index_system_curated",
+    "iteration": 1,
+    "status": "SUCCESS",
+    "selected_tool": "openai_code_interpreter",
+    "expected_tool": "openai_code_interpreter",
+    "duration_ms": 1691,
+    "token_usage": {
+      "prompt": 1680,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:50:02.414Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_15",
+    "turn_depth": 15,
+    "condition": "direct_all_tools",
+    "iteration": 2,
+    "status": "SUCCESS",
+    "selected_tool": "openai_code_interpreter",
+    "expected_tool": "openai_code_interpreter",
+    "duration_ms": 968,
+    "token_usage": {
+      "prompt": 10680,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:50:04.382Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_15",
+    "turn_depth": 15,
+    "condition": "skill_index_system_curated",
+    "iteration": 2,
+    "status": "SUCCESS",
+    "selected_tool": "openai_code_interpreter",
+    "expected_tool": "openai_code_interpreter",
+    "duration_ms": 1199,
+    "token_usage": {
+      "prompt": 1680,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:50:06.582Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_20",
+    "turn_depth": 20,
+    "condition": "direct_all_tools",
+    "iteration": 1,
+    "status": "SUCCESS",
+    "selected_tool": "claude_svg_diagram",
+    "expected_tool": "claude_svg_diagram",
+    "duration_ms": 1356,
+    "token_usage": {
+      "prompt": 11080,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:50:08.939Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_20",
+    "turn_depth": 20,
+    "condition": "skill_index_system_curated",
+    "iteration": 1,
+    "status": "SUCCESS",
+    "selected_tool": "claude_svg_diagram",
+    "expected_tool": "claude_svg_diagram",
+    "duration_ms": 1326,
+    "token_usage": {
+      "prompt": 2080,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:50:11.266Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_20",
+    "turn_depth": 20,
+    "condition": "direct_all_tools",
+    "iteration": 2,
+    "status": "ERROR",
+    "selected_tool": null,
+    "expected_tool": "claude_svg_diagram",
+    "duration_ms": 18465,
+    "token_usage": {
+      "prompt": 11080,
+      "candidates": 1
+    },
+    "error_message": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 15, model: gemini-3.1-flash-lite\\nPlease retry in 29.292522278s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.1-flash-lite\"},\"quotaValue\":\"15\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"29s\"}]}}",
+    "timestamp": "2026-10-11T07:50:30.731Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  },
+  {
+    "case_id": "gaia_turn_20",
+    "turn_depth": 20,
+    "condition": "skill_index_system_curated",
+    "iteration": 2,
+    "status": "SUCCESS",
+    "selected_tool": "claude_svg_diagram",
+    "expected_tool": "claude_svg_diagram",
+    "duration_ms": 1182,
+    "token_usage": {
+      "prompt": 2080,
+      "candidates": 1
+    },
+    "timestamp": "2026-10-11T07:50:32.913Z",
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)"
+  }
+]

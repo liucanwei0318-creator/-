@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Skill } from '../types/agent';
-import { getEcosystemBundles, EcosystemBundle, INITIAL_SKILLS } from '../data/defaultSkills';
+import { getEcosystemBundles, INITIAL_SKILLS } from '../data/defaultSkills';
 import {
   Download,
   CheckCircle2,
@@ -16,6 +16,9 @@ import {
   ShieldCheck,
   Check,
   RotateCcw,
+  Search,
+  Award,
+  Zap,
 } from 'lucide-react';
 
 interface EcosystemImporterModalProps {
@@ -34,8 +37,10 @@ export const EcosystemImporterModal: React.FC<EcosystemImporterModalProps> = ({
   onRestoreAllSkills,
 }) => {
   const [selectedBundleId, setSelectedBundleId] = useState<
-    'all' | 'openai' | 'claude' | 'deepseek' | 'business'
+    'all' | 'openai' | 'claude' | 'qwen' | 'deepseek' | 'business'
   >('openai');
+  const [searchFilter, setSearchFilter] = useState('');
+  const [selectedSkillIds, setSelectedSkillIds] = useState<Set<string>>(new Set());
   const [importedNotice, setImportedNotice] = useState<string | null>(null);
 
   if (!isOpen) return null;
@@ -45,12 +50,24 @@ export const EcosystemImporterModal: React.FC<EcosystemImporterModalProps> = ({
 
   // 当前所选包中的技能
   const activeBundle = bundles.find((b) => b.id === selectedBundleId);
-  const displayedSkills =
+  const rawDisplayedSkills =
     selectedBundleId === 'all'
       ? INITIAL_SKILLS
       : activeBundle
       ? activeBundle.skills
       : INITIAL_SKILLS;
+
+  // 关键词过滤
+  const displayedSkills = rawDisplayedSkills.filter((s) => {
+    if (!searchFilter.trim()) return true;
+    const q = searchFilter.toLowerCase().trim();
+    return (
+      s.name.toLowerCase().includes(q) ||
+      (s.display_name && s.display_name.toLowerCase().includes(q)) ||
+      s.description.toLowerCase().includes(q) ||
+      s.clusters.some((c) => c.toLowerCase().includes(q))
+    );
+  });
 
   // 计算所选包中有多少项是库中尚未存在的
   const newSkillsInBundle = displayedSkills.filter((s) => !currentSkillIds.has(s.skill_id));
@@ -68,6 +85,43 @@ export const EcosystemImporterModal: React.FC<EcosystemImporterModalProps> = ({
     setTimeout(() => setImportedNotice(null), 3500);
   };
 
+  // 勾选操作：切换单个选择
+  const toggleSelect = (skillId: string) => {
+    setSelectedSkillIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(skillId)) {
+        next.delete(skillId);
+      } else {
+        next.add(skillId);
+      }
+      return next;
+    });
+  };
+
+  // 全选当前分类未添加技能
+  const handleSelectAllUninstalled = () => {
+    const uninstalledIds = displayedSkills
+      .filter((s) => !currentSkillIds.has(s.skill_id))
+      .map((s) => s.skill_id);
+    setSelectedSkillIds(new Set(uninstalledIds));
+  };
+
+  // 批量导入自主勾选的技能
+  const handleImportSelected = () => {
+    const toAdd = INITIAL_SKILLS.filter(
+      (s) => selectedSkillIds.has(s.skill_id) && !currentSkillIds.has(s.skill_id)
+    );
+    if (toAdd.length === 0) {
+      setImportedNotice('请先勾选尚未加入工作台的技能！');
+      setTimeout(() => setImportedNotice(null), 3000);
+      return;
+    }
+    onImportSkills(toAdd);
+    setImportedNotice(`已成功将自主勾选的 ${toAdd.length} 项生态技能添加至工作台！`);
+    setSelectedSkillIds(new Set());
+    setTimeout(() => setImportedNotice(null), 3500);
+  };
+
   // 导入单个技能
   const handleImportSingle = (skill: Skill) => {
     if (currentSkillIds.has(skill.skill_id)) return;
@@ -76,7 +130,7 @@ export const EcosystemImporterModal: React.FC<EcosystemImporterModalProps> = ({
     setTimeout(() => setImportedNotice(null), 3000);
   };
 
-  // 一键恢复全部 24+ 预置生态技能
+  // 一键恢复全部 79 项预置生态技能
   const handleRestoreFullLibrary = () => {
     if (onRestoreAllSkills) {
       onRestoreAllSkills();
@@ -86,13 +140,13 @@ export const EcosystemImporterModal: React.FC<EcosystemImporterModalProps> = ({
         onImportSkills(missing);
       }
     }
-    setImportedNotice(`已恢复并接入全部 ${INITIAL_SKILLS.length} 项 OpenAI / Claude / DeepSeek 及业务生态技能！`);
+    setImportedNotice(`已恢复并接入全部 ${INITIAL_SKILLS.length} 项 OpenAI / Claude / Qwen / DeepSeek 及业务生态技能！`);
     setTimeout(() => setImportedNotice(null), 3500);
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-5xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
         {/* 弹窗顶栏 */}
         <div className="px-6 py-4 border-b border-slate-800 bg-slate-950 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -103,11 +157,11 @@ export const EcosystemImporterModal: React.FC<EcosystemImporterModalProps> = ({
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 主流大模型生态技能库接入器 (Ecosystem Skills Importer)
                 <span className="text-[11px] font-normal px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  OpenAI · Claude · DeepSeek
+                  OpenAI · Claude · Qwen · DeepSeek ({INITIAL_SKILLS.length}项)
                 </span>
               </h3>
               <p className="text-xs text-slate-400 mt-0.5">
-                扩充技能样本库：一键接入业界标杆智能体工具，支持单项挑选与整套生态包极速导入
+                支持<strong>自主勾选选择添加</strong>或<strong>一键接入生态包</strong>，扩展智能体调度样本库
               </p>
             </div>
           </div>
@@ -153,7 +207,19 @@ export const EcosystemImporterModal: React.FC<EcosystemImporterModalProps> = ({
               }`}
             >
               <Brain className="w-3.5 h-3.5" />
-              Claude 生态库 ({INITIAL_SKILLS.filter((s) => s.ecosystem === 'claude').length})
+              Claude 深度库 ({INITIAL_SKILLS.filter((s) => s.ecosystem === 'claude').length})
+            </button>
+
+            <button
+              onClick={() => setSelectedBundleId('qwen')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
+                selectedBundleId === 'qwen'
+                  ? 'bg-purple-600 text-white shadow-sm'
+                  : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-purple-300" />
+              Qwen 通义千问 ({INITIAL_SKILLS.filter((s) => s.ecosystem === 'qwen').length})
             </button>
 
             <button
@@ -200,30 +266,85 @@ export const EcosystemImporterModal: React.FC<EcosystemImporterModalProps> = ({
               className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 disabled:text-slate-500 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
-              一键导入该生态 ({newSkillsInBundle.length} 项待导入)
+              一键导入该生态 ({newSkillsInBundle.length} 项)
             </button>
 
             <button
               onClick={handleRestoreFullLibrary}
-              title="载入全部 24+ 预置生态技能，大幅扩大测试样本"
+              title="载入全部 79 项大模型预置生态技能"
               className="px-3 py-1.5 rounded-lg bg-indigo-950 hover:bg-indigo-900 border border-indigo-800 text-indigo-300 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              一键接入全部大模型技能
+              一键接入全部 79 项
+            </button>
+          </div>
+        </div>
+
+        {/* 搜索与自主多选控制栏 */}
+        <div className="px-6 py-2.5 bg-slate-950 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-3">
+            <label className="flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white">
+              <input
+                type="checkbox"
+                checked={
+                  newSkillsInBundle.length > 0 &&
+                  newSkillsInBundle.every((s) => selectedSkillIds.has(s.skill_id))
+                }
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    handleSelectAllUninstalled();
+                  } else {
+                    setSelectedSkillIds(new Set());
+                  }
+                }}
+                className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-700 bg-slate-900"
+              />
+              <span>全选待接入项</span>
+            </label>
+
+            <span className="text-slate-600">|</span>
+
+            <span className="text-slate-400">
+              已勾选: <strong className="text-sky-400 font-mono">{selectedSkillIds.size}</strong> 项
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 flex-1 max-w-sm justify-end">
+            <div className="relative w-full max-w-xs">
+              <Search className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchFilter}
+                onChange={(e) => setSearchFilter(e.target.value)}
+                placeholder="筛选名称、领域或槽位..."
+                className="w-full pl-8 pr-3 py-1 bg-slate-900 border border-slate-800 rounded-lg text-white text-xs placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              />
+            </div>
+
+            <button
+              onClick={handleImportSelected}
+              disabled={selectedSkillIds.size === 0}
+              className="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white text-xs font-semibold whitespace-nowrap cursor-pointer transition-colors"
+            >
+              添加勾选项 ({selectedSkillIds.size})
             </button>
           </div>
         </div>
 
         {/* 技能卡片列表展示区 */}
         <div className="p-6 overflow-y-auto space-y-3.5 flex-1 max-h-[60vh]">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
             {displayedSkills.map((skill) => {
               const isAlreadyLoaded = currentSkillIds.has(skill.skill_id);
+              const isSelected = selectedSkillIds.has(skill.skill_id);
+
               const badgeStyle =
                 skill.ecosystem === 'openai'
                   ? 'text-emerald-400 border-emerald-800/60 bg-emerald-950/30'
                   : skill.ecosystem === 'claude'
                   ? 'text-amber-400 border-amber-800/60 bg-amber-950/30'
+                  : skill.ecosystem === 'qwen'
+                  ? 'text-purple-400 border-purple-800/60 bg-purple-950/30'
                   : skill.ecosystem === 'deepseek'
                   ? 'text-blue-400 border-blue-800/60 bg-blue-950/30'
                   : 'text-indigo-400 border-indigo-800/60 bg-indigo-950/30';
@@ -233,6 +354,8 @@ export const EcosystemImporterModal: React.FC<EcosystemImporterModalProps> = ({
                   ? 'OpenAI'
                   : skill.ecosystem === 'claude'
                   ? 'Claude'
+                  : skill.ecosystem === 'qwen'
+                  ? 'Qwen'
                   : skill.ecosystem === 'deepseek'
                   ? 'DeepSeek'
                   : 'Enterprise';
@@ -240,67 +363,76 @@ export const EcosystemImporterModal: React.FC<EcosystemImporterModalProps> = ({
               return (
                 <div
                   key={skill.skill_id}
-                  className={`p-4 rounded-xl border transition-all ${
-                    isAlreadyLoaded
-                      ? 'bg-slate-950/50 border-slate-800/80 opacity-80'
+                  className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between ${
+                    isSelected
+                      ? 'ring-2 ring-indigo-500 bg-slate-900 border-indigo-500/80 shadow-md'
+                      : isAlreadyLoaded
+                      ? 'bg-slate-950/50 border-slate-800/80 opacity-75'
                       : 'bg-slate-900/90 border-slate-700/80 hover:border-slate-600 shadow-sm'
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-3 mb-2">
-                    <div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span
-                          className={`text-[10px] font-mono px-1.5 py-0.5 rounded border ${badgeStyle}`}
-                        >
-                          {ecoName}
-                        </span>
-                        <span className="font-bold text-sm text-white">
-                          {skill.display_name || skill.name}
-                        </span>
+                  <div>
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2">
+                        {!isAlreadyLoaded ? (
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => toggleSelect(skill.skill_id)}
+                            className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-700 bg-slate-800 cursor-pointer shrink-0 mt-0.5"
+                          />
+                        ) : null}
+                        <div>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span
+                              className={`text-[10px] font-mono px-1.5 py-0.2 rounded border ${badgeStyle}`}
+                            >
+                              {ecoName}
+                            </span>
+                            <span className="font-bold text-xs text-white">
+                              {skill.display_name || skill.name}
+                            </span>
+                          </div>
+                          <span className="text-[10px] font-mono text-slate-400 block mt-0.5">
+                            {skill.name}
+                          </span>
+                        </div>
                       </div>
-                      <span className="text-[11px] font-mono text-slate-400 block mt-0.5">
-                        {skill.name}
-                      </span>
+
+                      {isAlreadyLoaded ? (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1 shrink-0">
+                          <Check className="w-3 h-3 text-emerald-400" />
+                          已在库中
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => handleImportSingle(skill)}
+                          className="px-2 py-0.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-semibold flex items-center gap-1 transition-colors shrink-0 cursor-pointer shadow-sm"
+                        >
+                          <Plus className="w-3 h-3" />
+                          接入
+                        </button>
+                      )}
                     </div>
 
-                    {isAlreadyLoaded ? (
-                      <span className="px-2 py-1 rounded text-[11px] font-medium bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1 shrink-0">
-                        <Check className="w-3 h-3 text-emerald-400" />
-                        已在库中
-                      </span>
-                    ) : (
-                      <button
-                        onClick={() => handleImportSingle(skill)}
-                        className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1 transition-colors shrink-0 cursor-pointer shadow-sm"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
-                        接入此技能
-                      </button>
-                    )}
+                    <p className="text-[11px] text-slate-300 leading-relaxed line-clamp-2 mb-2">
+                      {skill.description}
+                    </p>
                   </div>
 
-                  <p className="text-xs text-slate-300 leading-relaxed line-clamp-2 mb-2.5">
-                    {skill.description}
-                  </p>
-
-                  <div className="space-y-1 text-[11px] text-slate-400 border-t border-slate-800/80 pt-2">
-                    <div className="flex items-center gap-1.5">
+                  <div className="space-y-1 text-[10px] text-slate-400 border-t border-slate-800/80 pt-2 mt-1">
+                    <div className="flex items-center gap-1">
                       <span className="text-slate-500">双轴特征:</span>
                       <span className="text-sky-300">{skill.content_domain || '通用内容'}</span>
                       <span className="text-slate-600">·</span>
                       <span className="text-indigo-300">{skill.tool_carrier || '通用工具'}</span>
                     </div>
-                    <div className="flex items-start gap-1.5">
-                      <span className="text-slate-500 shrink-0">参数槽位:</span>
+                    <div className="flex items-start gap-1">
+                      <span className="text-slate-500 shrink-0">槽位:</span>
                       <span className="font-mono text-slate-300 truncate">
                         {skill.required_slots.join(', ')}
                       </span>
                     </div>
-                    {skill.disambiguation_features && (
-                      <div className="text-[10px] text-emerald-400/90 truncate">
-                        消歧: {skill.disambiguation_features}
-                      </div>
-                    )}
                   </div>
                 </div>
               );
@@ -314,7 +446,7 @@ export const EcosystemImporterModal: React.FC<EcosystemImporterModalProps> = ({
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>
               当前工作台技能总量: <strong className="text-white font-mono">{currentSkills.length}</strong> 项
-              (样本库最大容量: <strong className="text-sky-400 font-mono">{INITIAL_SKILLS.length}+</strong> 项)
+              (四大模型数据库总量: <strong className="text-sky-400 font-mono">{INITIAL_SKILLS.length}</strong> 项)
             </span>
           </div>
           <button

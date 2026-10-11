@@ -17,6 +17,8 @@ import {
   Search,
   CheckCircle2,
   Download,
+  Upload,
+  FileJson,
   X,
   Layers,
 } from 'lucide-react';
@@ -25,6 +27,9 @@ interface RegistrationGateViewProps {
   skills: Skill[];
   onRegisterSkill: (skill: Skill) => void;
   onDeleteSkill: (skillId: string) => void;
+  onNavigateToTab?: (
+    tab: 'chat' | 'orchestrator' | 'gate' | 'index' | 'governance' | 'ecosystem'
+  ) => void;
   onAddSkills?: (skills: Skill[]) => void;
   onRestoreAllSkills?: () => void;
 }
@@ -33,6 +38,7 @@ export const RegistrationGateView: React.FC<RegistrationGateViewProps> = ({
   skills,
   onRegisterSkill,
   onDeleteSkill,
+  onNavigateToTab,
   onAddSkills,
   onRestoreAllSkills,
 }) => {
@@ -41,6 +47,8 @@ export const RegistrationGateView: React.FC<RegistrationGateViewProps> = ({
   const [tableSearch, setTableSearch] = useState('');
   const [deleteConfirmSkill, setDeleteConfirmSkill] = useState<{ id: string; name: string } | null>(null);
   const [deleteToast, setDeleteToast] = useState<string | null>(null);
+  const [exportToast, setExportToast] = useState<string | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   // 手动表单字段
   const [name, setName] = useState('');
@@ -192,6 +200,99 @@ export const RegistrationGateView: React.FC<RegistrationGateViewProps> = ({
     setTimeout(() => setDeleteToast(null), 3500);
   };
 
+  // 导出配置功能：将当前的 skills 数组转换成 JSON 文件并触发浏览器下载
+  const handleExportConfig = () => {
+    try {
+      // 过滤掉运行时的 mock_executor 函数以保证 JSON 纯净可读并支持持久化导入
+      const exportableSkills = skills.map(({ mock_executor, ...rest }) => rest);
+      const dataStr = JSON.stringify(exportableSkills, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const now = new Date();
+      const datePart = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(
+        now.getDate()
+      ).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(
+        now.getMinutes()
+      ).padStart(2, '0')}`;
+      link.href = url;
+      link.download = `skills_config_${datePart}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      setExportToast(
+        `已成功导出 ${skills.length} 项技能配置 JSON 文件！可用于备份或在不同实例间迁移。`
+      );
+      setTimeout(() => setExportToast(null), 4000);
+    } catch (err) {
+      console.error('Failed to export skills config:', err);
+      setDeleteToast('导出技能配置文件失败，请重试');
+      setTimeout(() => setDeleteToast(null), 3000);
+    }
+  };
+
+  // 导入迁移配置功能 (配套迁移与恢复)
+  const handleImportConfigFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const text = evt.target?.result as string;
+        const parsed = JSON.parse(text);
+        if (!Array.isArray(parsed) || parsed.length === 0) {
+          alert('导入失败：JSON 文件必须包含非空的技能配置数组');
+          return;
+        }
+
+        const importedSkills: Skill[] = parsed.map((item: any, idx: number) => {
+          const name = item.name || `Migrated_Skill_${idx + 1}`;
+          return {
+            skill_id: item.skill_id || `skill_imported_${Date.now()}_${idx}`,
+            name,
+            display_name: item.display_name || name,
+            description: item.description || '从备份配置迁移的技能',
+            clusters:
+              Array.isArray(item.clusters) && item.clusters.length > 0
+                ? item.clusters
+                : ['通用工具'],
+            required_slots: Array.isArray(item.required_slots) ? item.required_slots : [],
+            negative_triggers: Array.isArray(item.negative_triggers) ? item.negative_triggers : [],
+            disambiguation_features: item.disambiguation_features || '',
+            call_count: typeof item.call_count === 'number' ? item.call_count : 0,
+            error_count: typeof item.error_count === 'number' ? item.error_count : 0,
+            error_rate: typeof item.error_rate === 'number' ? item.error_rate : 0,
+            domains_invoked: Array.isArray(item.domains_invoked) ? item.domains_invoked : [],
+            governance_status: item.governance_status || 'normal',
+            ecosystem: item.ecosystem || 'custom',
+            embedding:
+              item.embedding ||
+              SimpleEmbeddingProvider.getEmbedding(`${name} ${item.description || ''}`),
+            mock_executor: (slots, prevOutput) =>
+              `【${name} 完成】已执行迁移导入技能调度。${prevOutput ? ` (上游输出已传递)` : ''}`,
+          };
+        });
+
+        if (onAddSkills) {
+          onAddSkills(importedSkills);
+          setExportToast(`已成功从配置文件导入并合并 ${importedSkills.length} 项技能设置！`);
+          setTimeout(() => setExportToast(null), 4000);
+        }
+      } catch (err) {
+        console.error('Import parse error:', err);
+        alert('导入配置文件解析失败，请检查是否为有效的 JSON 格式');
+      } finally {
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+      }
+    };
+    reader.readAsText(file);
+  };
+
   // 筛选档案列表
   const filteredArchive = useMemo(() => {
     if (!tableSearch.trim()) return skills;
@@ -237,17 +338,62 @@ export const RegistrationGateView: React.FC<RegistrationGateViewProps> = ({
           </button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json,application/json"
+            onChange={handleImportConfigFile}
+            className="hidden"
+          />
+
           <button
             type="button"
-            onClick={() => setShowImporter(true)}
-            className="px-3.5 py-1.5 text-xs font-semibold text-emerald-300 bg-emerald-950/60 hover:bg-emerald-900/60 border border-emerald-800/80 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
+            onClick={handleExportConfig}
+            className="px-3 py-1.5 text-xs font-semibold text-sky-300 bg-sky-950/60 hover:bg-sky-900/80 border border-sky-700/60 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+            title="将当前技能库完整转换为 JSON 配置文件并触发浏览器下载，方便备份与跨实例迁移"
+          >
+            <Download className="w-3.5 h-3.5 text-sky-400" />
+            <span>导出配置 (JSON)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="px-3 py-1.5 text-xs font-semibold text-slate-300 bg-slate-850 hover:bg-slate-800 border border-slate-700 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+            title="从本地 JSON 配置文件导入技能并迁移合入当前系统"
+          >
+            <Upload className="w-3.5 h-3.5 text-slate-400" />
+            <span>导入配置</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => (onNavigateToTab ? onNavigateToTab('ecosystem') : setShowImporter(true))}
+            className="px-3.5 py-1.5 text-xs font-semibold text-emerald-300 bg-gradient-to-r from-emerald-950/90 to-indigo-950/90 hover:from-emerald-900/90 hover:to-indigo-900/90 border border-emerald-600/70 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
           >
             <Bot className="w-4 h-4 text-emerald-400" />
-            <span>接入生态技能库 (OpenAI · Claude · DeepSeek)</span>
+            <span>主流大模型生态库 (79项 · 自主选择/推荐)</span>
           </button>
         </div>
       </div>
+
+      {/* 导出/导入操作通知 */}
+      {exportToast && (
+        <div className="p-3 bg-emerald-950/70 border border-emerald-800/60 rounded-xl text-xs text-emerald-200 flex items-center justify-between gap-2 animate-in fade-in">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>{exportToast}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setExportToast(null)}
+            className="text-emerald-400 hover:text-emerald-200 p-0.5 cursor-pointer"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* 删除成功通知 */}
       {deleteToast && (
@@ -549,6 +695,15 @@ export const RegistrationGateView: React.FC<RegistrationGateViewProps> = ({
                 恢复全套样本
               </button>
             )}
+            <button
+              type="button"
+              onClick={handleExportConfig}
+              title="将当前全部技能导出为 JSON 配置文件并下载"
+              className="px-2.5 py-1.5 text-xs text-sky-300 hover:text-white bg-sky-950/70 hover:bg-sky-900/80 border border-sky-800/80 rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm"
+            >
+              <Download className="w-3.5 h-3.5 text-sky-400" />
+              <span>导出配置</span>
+            </button>
           </div>
         </div>
 

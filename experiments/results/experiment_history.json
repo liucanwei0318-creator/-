@@ -1,0 +1,108 @@
+[
+  {
+    "run_id": "run_baseline_01",
+    "round_number": 1,
+    "round_name": "第 1 轮实验 (全量基线评测)",
+    "timestamp": "2026-10-11T07:20:00.000Z",
+    "mode": "full",
+    "iterations": 2,
+    "total_calls": 32,
+    "total_cases": 8,
+    "summary": {
+      "1": {
+        "turn": 1,
+        "baseline_success": 1,
+        "baseline_total": 2,
+        "baseline_error_rate": 0.5,
+        "sis_success": 0,
+        "sis_total": 2,
+        "sis_error_rate": 1,
+        "avg_latency_baseline": 886,
+        "avg_latency_sis": 966
+      },
+      "2": {
+        "turn": 2,
+        "baseline_success": 2,
+        "baseline_total": 2,
+        "baseline_error_rate": 0,
+        "sis_success": 2,
+        "sis_total": 2,
+        "sis_error_rate": 0,
+        "avg_latency_baseline": 1170,
+        "avg_latency_sis": 1385
+      },
+      "3": {
+        "turn": 3,
+        "baseline_success": 2,
+        "baseline_total": 2,
+        "baseline_error_rate": 0,
+        "sis_success": 2,
+        "sis_total": 2,
+        "sis_error_rate": 0,
+        "avg_latency_baseline": 615,
+        "avg_latency_sis": 664
+      },
+      "5": {
+        "turn": 5,
+        "baseline_success": 2,
+        "baseline_total": 2,
+        "baseline_error_rate": 0,
+        "sis_success": 2,
+        "sis_total": 2,
+        "sis_error_rate": 0,
+        "avg_latency_baseline": 597,
+        "avg_latency_sis": 807
+      },
+      "8": {
+        "turn": 8,
+        "baseline_success": 2,
+        "baseline_total": 2,
+        "baseline_error_rate": 0,
+        "sis_success": 2,
+        "sis_total": 2,
+        "sis_error_rate": 0,
+        "avg_latency_baseline": 645,
+        "avg_latency_sis": 989
+      },
+      "10": {
+        "turn": 10,
+        "baseline_success": 0,
+        "baseline_total": 2,
+        "baseline_error_rate": 1,
+        "sis_success": 2,
+        "sis_total": 2,
+        "sis_error_rate": 0,
+        "avg_latency_baseline": 577,
+        "avg_latency_sis": 1209
+      },
+      "15": {
+        "turn": 15,
+        "baseline_success": 2,
+        "baseline_total": 2,
+        "baseline_error_rate": 0,
+        "sis_success": 2,
+        "sis_total": 2,
+        "sis_error_rate": 0,
+        "avg_latency_baseline": 1074,
+        "avg_latency_sis": 1445
+      },
+      "20": {
+        "turn": 20,
+        "baseline_success": 1,
+        "baseline_total": 2,
+        "baseline_error_rate": 0.5,
+        "sis_success": 2,
+        "sis_total": 2,
+        "sis_error_rate": 0,
+        "avg_latency_baseline": 9911,
+        "avg_latency_sis": 1254
+      }
+    },
+    "metrics": {
+      "critical_turn": "第 8 ~ 10 轮",
+      "baseline_max_error": "100%",
+      "sis_error_rate": "0%",
+      "token_compressed": "-87.5%"
+    }
+  }
+]

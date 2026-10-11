@@ -32,6 +32,9 @@ interface SkillIndexViewProps {
   skills: Skill[];
   onDeleteSkill?: (skillId: string) => void;
   onNavigateToGovernance?: () => void;
+  onNavigateToTab?: (
+    tab: 'chat' | 'orchestrator' | 'gate' | 'index' | 'governance' | 'ecosystem'
+  ) => void;
   onAddSkills?: (skills: Skill[]) => void;
   onRestoreAllSkills?: () => void;
 }
@@ -40,6 +43,7 @@ export const SkillIndexView: React.FC<SkillIndexViewProps> = ({
   skills,
   onDeleteSkill,
   onNavigateToGovernance,
+  onNavigateToTab,
   onAddSkills,
   onRestoreAllSkills,
 }) => {
@@ -47,7 +51,7 @@ export const SkillIndexView: React.FC<SkillIndexViewProps> = ({
   const [selectedDomain, setSelectedDomain] = useState<string>('all');
   const [selectedToolCarrier, setSelectedToolCarrier] = useState<string>('all');
   const [selectedEcosystem, setSelectedEcosystem] = useState<
-    'all' | 'openai' | 'claude' | 'deepseek' | 'business'
+    'all' | 'openai' | 'claude' | 'qwen' | 'deepseek' | 'business'
   >('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [expandedSkillId, setExpandedSkillId] = useState<string | null>(null);
@@ -200,7 +204,7 @@ export const SkillIndexView: React.FC<SkillIndexViewProps> = ({
     const link = document.createElement('a');
     const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
     link.href = url;
-    link.setAttribute('download', `skillpilot_skills_${timestamp}.csv`);
+    link.setAttribute('download', `skill_index_system_skills_${timestamp}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -242,12 +246,12 @@ export const SkillIndexView: React.FC<SkillIndexViewProps> = ({
           <div className="flex items-center gap-2 shrink-0 flex-wrap">
             <button
               type="button"
-              onClick={() => setShowImporter(true)}
-              className="px-3.5 py-2 rounded-lg bg-emerald-950/70 hover:bg-emerald-900/70 border border-emerald-800/80 text-emerald-300 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
-              title="接入 OpenAI, Claude, DeepSeek 技能库扩大样本"
+              onClick={() => (onNavigateToTab ? onNavigateToTab('ecosystem') : setShowImporter(true))}
+              className="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-950/90 to-indigo-950/90 hover:from-emerald-900/90 hover:to-indigo-900/90 border border-emerald-600/70 text-emerald-300 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+              title="直连 OpenAI, Claude, Qwen, DeepSeek 数据库自主勾选添加与智能推荐 (79 项)"
             >
               <Bot className="w-4 h-4 text-emerald-400" />
-              <span>接入模型生态库</span>
+              <span>主流大模型生态库 (79项)</span>
             </button>
 
             {onNavigateToGovernance && (
@@ -381,6 +385,18 @@ export const SkillIndexView: React.FC<SkillIndexViewProps> = ({
           >
             <Brain className="w-3 h-3" />
             Claude ({skills.filter((s) => s.ecosystem === 'claude').length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedEcosystem('qwen')}
+            className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer ${
+              selectedEcosystem === 'qwen'
+                ? 'bg-purple-600 text-white'
+                : 'bg-slate-950 text-purple-400 hover:text-purple-300 border border-purple-950'
+            }`}
+          >
+            <Sparkles className="w-3 h-3 text-purple-300" />
+            Qwen ({skills.filter((s) => s.ecosystem === 'qwen').length})
           </button>
           <button
             type="button"
@@ -592,6 +608,8 @@ export const SkillIndexView: React.FC<SkillIndexViewProps> = ({
               ? { label: 'OpenAI', cls: 'bg-emerald-950/60 text-emerald-300 border-emerald-800/80' }
               : skill.ecosystem === 'claude'
               ? { label: 'Claude', cls: 'bg-amber-950/60 text-amber-300 border-amber-800/80' }
+              : skill.ecosystem === 'qwen'
+              ? { label: 'Qwen', cls: 'bg-purple-950/60 text-purple-300 border-purple-800/80' }
               : skill.ecosystem === 'deepseek'
               ? { label: 'DeepSeek', cls: 'bg-blue-950/60 text-blue-300 border-blue-800/80' }
               : { label: 'Business', cls: 'bg-indigo-950/60 text-indigo-300 border-indigo-800/80' };

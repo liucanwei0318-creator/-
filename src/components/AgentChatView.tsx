@@ -54,7 +54,7 @@ export const AgentChatView: React.FC<AgentChatViewProps> = ({
     {
       id: 'msg-welcome',
       sender: 'agent',
-      text: '你好！我是由 SkillPilot 驱动的智能体 Agent。我已经挂载了当前技能库中的所有技能（包括 PDF格式转换、水印防护、天气预报、数据分析等）。\n\n您可以直接用自然语言向我指派任务，我会自动通过【时序仲裁器】、【两阶段索引】与【任务编排流水线】来调用对应的 Skill 并向您汇报结果！',
+      text: '你好！我是由 Skill Index System 驱动的智能体 Agent。我已经挂载了当前技能库中的所有技能（包括 PDF格式转换、水印防护、天气预报、数据分析等）。\n\n您可以直接用自然语言向我指派任务，我会自动通过【时序仲裁器】、【两阶段索引】与【任务编排流水线】来调用对应的 Skill 并向您汇报结果！',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -77,20 +77,20 @@ export const AgentChatView: React.FC<AgentChatViewProps> = ({
 
   const quickPrompts = [
     {
-      text: '查询上海明天的天气预报和气温走势',
-      desc: '单意图触发 Weather_Forecast',
+      text: '查询北京明天的天气预报和气温走势',
+      desc: '单意图触发 Weather_Forecast (提取槽位: city=北京, date=明天)',
     },
     {
       text: '不对，解释一下为什么会降温？',
-      desc: '时序仲裁 RETAIN (保留当前天气技能)',
+      desc: '长对话时序自闭环 RETAIN (继承上一轮北京天气槽位与上下文)',
     },
     {
-      text: '分析上周销售数据，生成PDF总结，并加上机密水印',
-      desc: '复合编排流水线 (3 个技能连续协同)',
+      text: '请用 Python 代码沙箱对图片进行文字识别与视觉OCR解析',
+      desc: '反面示例分流 (Negative Example ➔ 自动导流至 OpenAI Vision OCR)',
     },
     {
-      text: '请用 PDF_Watermarker 去掉图片的水印',
-      desc: '负向规则拦截 (Negative Trigger 规避)',
+      text: '分析上季度销售报表，转换为PDF文档，并加盖机密透明水印',
+      desc: '复合编排流水线 (UCSB 动态精炼剔除 90% 干扰技能，大幅节省 Token)',
     },
   ];
 
@@ -291,7 +291,7 @@ export const AgentChatView: React.FC<AgentChatViewProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-sm font-bold text-white">SkillPilot 实时智能体</h2>
+                <h2 className="text-sm font-bold text-white">Skill Index System 实时智能体</h2>
                 <span className="text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-800/80 px-1.5 py-0.2 rounded font-mono">
                   Online
                 </span>
@@ -410,14 +410,21 @@ export const AgentChatView: React.FC<AgentChatViewProps> = ({
                             key={idx}
                             className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5"
                           >
-                            <div className="flex items-center justify-between text-indigo-300 text-xs">
+                            <div className="flex items-center justify-between text-indigo-300 text-xs flex-wrap gap-1">
                               <span className="font-bold flex items-center gap-1.5">
                                 <Zap className="w-3.5 h-3.5 text-amber-400" />
                                 交付产物: [{step.skill_name}] - {step.title}
                               </span>
-                              <span className="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
-                                <CheckCircle2 className="w-3 h-3" /> 成功
-                              </span>
+                              <div className="flex items-center gap-1.5">
+                                {step.negative_diverted_from && (
+                                  <span className="text-[10px] bg-rose-950/80 text-rose-300 border border-rose-800 px-1.5 py-0.2 rounded font-mono">
+                                    ⚡ 反面示例分流
+                                  </span>
+                                )}
+                                <span className="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
+                                  <CheckCircle2 className="w-3 h-3" /> 成功
+                                </span>
+                              </div>
                             </div>
                             <div className="p-2 bg-slate-950 rounded text-slate-200 text-xs font-mono leading-relaxed">
                               {step.output}
@@ -563,6 +570,24 @@ export const AgentChatView: React.FC<AgentChatViewProps> = ({
                   ? JSON.stringify(session.active_slots, null, 2)
                   : '[] (空)'}
               </pre>
+            </div>
+
+            <div className="p-3 bg-slate-950 rounded-lg border border-slate-800">
+              <span className="text-[10px] text-slate-500 block">长对话信息提取与抗干扰保障 (Long-Context Guarantee)</span>
+              <div className="mt-1.5 space-y-1 text-[10px]">
+                <div className="flex items-center justify-between text-slate-300">
+                  <span>时序仲裁器 (Arbiter)</span>
+                  <span className="text-emerald-400 font-mono font-bold">RETAIN 自闭环防漂移</span>
+                </div>
+                <div className="flex items-center justify-between text-slate-300">
+                  <span>UCSB 动态精炼 (Subsetting)</span>
+                  <span className="text-indigo-300 font-mono font-bold">削减 90%+ 干扰项</span>
+                </div>
+                <div className="flex items-center justify-between text-slate-300">
+                  <span>反面示例分流 (Negative Rules)</span>
+                  <span className="text-rose-300 font-mono font-bold">互斥消歧已激活</span>
+                </div>
+              </div>
             </div>
 
             <div className="p-3 bg-slate-950 rounded-lg border border-slate-800">
